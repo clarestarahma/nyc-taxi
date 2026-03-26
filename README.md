@@ -12,9 +12,7 @@ Raw Data → Ingestion → Preprocessing → DuckDB/Parquet → Dashboard
 ```bash
 .
 ├── data/
-│   ├── raw/                # Bronze Layer
-│   ├── processed/          # Silver Layer
-│   └── gold/               # Gold Layer (DuckDB files)
+│   └── nyc-taxi.db
 ├── orchestration/          # Prefect flows & deployment
 ├── pipeline/
 │   ├── 01_ingestion/       # Script wget/fetching
@@ -27,9 +25,23 @@ Raw Data → Ingestion → Preprocessing → DuckDB/Parquet → Dashboard
 ```
 
 ## 🚀 Cara Menjalankan
-1. Install dependencies: `pip install -r requirements.txt`
-2. ??
-3. ??
+
+Ikuti langkah-langkah di bawah ini untuk menyiapkan lingkungan pengembangan dan menjalankan pipeline data.
+
+### 1. Persiapan Awal
+Pastikan kamu sudah meng-clone repository ini ke komputer lokal:
+`git clone [https://github.com/clarestarahma/nyc-taxi.git]`
+`cd nyc-taxi`
+
+### 2. Instalasi Tools Prasyarat
+- Install `uv` `(https://docs.astral.sh/uv/getting-started/installation/#standalone-installer)`
+- Install `just` `(https://github.com/casey/just)`
+
+### 3. Setup & Ingestion
+Gunakan perintah `just setup` untuk setup virtual environment dan install dependencies
+Gunakan perintah `just ingest` untuk menjalankan proses penarikan data (Ingestion) ke DuckDB
+Perintah lainnya dapat dilihat di file `justfile`
+
 
 ## 👥 Struktur Tim & Tanggung Jawab 
 | Nama | Tugas |

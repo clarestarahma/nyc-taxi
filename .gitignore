@@ -210,19 +210,22 @@ __marimo__/
 # NYC TAXI PROJECT SPECIFIC (LEAD CONFIG)
 # ==========================================
 
-# Data storage (Ignore heavy datasets)
-data/
+# Local database & large files
+*.db
+*.duckdb
 *.parquet
 *.csv
 
-# Local database files
-*.db
-*.duckdb
-
-# Prefect & Orchestration local state
+# Security & Environment
+.env
 .prefect/
 
-# Python virtual environment
-venv/
-.env
+# Python internal
 __pycache__/
+.venv/
+*.py[cod]
+
+# Editor Specific
+.vscode/
+.idea/
+*.db.wal

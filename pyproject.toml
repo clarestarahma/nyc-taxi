@@ -9,9 +9,13 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "duckdb>=1.5.1",
+    "httpx>=0.28.1",
     "pandas>=2.3.3",
+    "plotly>=6.6.0",
     "prefect>=3.6.23",
     "pyarrow>=23.0.1",
+    "python-dotenv>=1.2.2",
+    "sodapy>=2.2.0",
     "streamlit>=1.55.0",
 ]
 
