@@ -1,7 +1,5 @@
 import streamlit as st
-import duckdb
-import pandas as pd
-from nyc_taxi.utils.duckdb import execute_query, query_to_df
+from nyc_taxi.utils.duckdb import query_to_df
 from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 st.set_page_config(page_title="NYC Taxi Data Inspector", layout="wide")
