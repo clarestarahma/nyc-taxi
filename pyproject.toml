@@ -14,6 +14,7 @@ dependencies = [
     "pyarrow>=23.0.1",
     "python-dotenv>=1.2.2",
     "sodapy>=2.2.0",
+    "streamlit>=1.55.0",
 ]
 
 [build-system]

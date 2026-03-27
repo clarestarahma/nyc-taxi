@@ -14,6 +14,15 @@ setup:
 all_raw:
     uv run python -m nyc_taxi.pipeline.step_02_preprocessing.main show
 
+# Run the Streamlit dashboard for data inspection (default)
+inspect:
+    uv run streamlit run inspect_db.py
+
+# Clear Streamlit cache and restart the dashboard
+inspect-clean:
+    rm -rf ~/.streamlit/cache
+    uv run streamlit run inspect_db.py
+    
 # Run Prefect Server
 server:
     uv run prefect server start
