@@ -3,6 +3,7 @@ import pandas as pd
 from nyc_taxi.config import settings
 import os
 import logging
+from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 def get_connection():
     if not os.path.exists("data"):
@@ -16,16 +17,19 @@ def save_to_raw(df: pd.DataFrame, table_name: str, schema: str):
     target_table = f"{schema}.{table_name}"
     try:
         # 1. Pastikan Schema & Tabel ada (Auto-commit DDL)
-        execute_query(query=f"CREATE SCHEMA IF NOT EXISTS {schema}", df=None)
+        query = TaxiQueries.CREATE_SCHEMA.format(schema_name=schema)
+        execute_query(query=query, df=None)
 
         # Buat tabel kosong jika belum ada
-        execute_query(query=f"CREATE TABLE IF NOT EXISTS {target_table} AS SELECT * FROM df WHERE 1=0", df=df)
+        query = TaxiQueries.CREATE_TABLE.format(target_table=target_table)
+        execute_query(query=query, df=df)
         
         logger.info(f"📥 [DB] Menambahkan {len(df)} baris ke {target_table}...")
         
         # 3. Gunakan INSERT INTO daripada append untuk kestabilan antar schema
         # DuckDB bisa langsung baca DataFrame 'df' di dalam query SQL
-        execute_query(query=f"INSERT INTO {target_table} SELECT * FROM df", df=df)
+        query = TaxiQueries.INGEST_YELLOW_TAXI.format(target_table=target_table)
+        execute_query(query=query, df=df)
         
         logger.info(f"✅ [DB] {table_name} updated successfully.")
         
