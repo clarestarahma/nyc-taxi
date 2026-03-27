@@ -7,10 +7,8 @@ st.set_page_config(page_title="NYC Taxi Data Inspector", layout="wide")
 
 st.title("🚖 NYC Taxi - Raw Data Inspector")
 
-def get_data(table_name):
-    with duckdb.connect("data/nyc_taxi.db", read_only=True) as conn:
-        query = f"SELECT * FROM raw.{table_name} LIMIT 1000"
-        df = conn.execute(query).df()
+def get_data(*, table_name, schema):
+    df = query_to_df(f"SELECT * FROM {schema}.{table_name}")
     return df
 
 # Sidebar untuk pilih tabel
@@ -21,7 +19,7 @@ table = st.sidebar.selectbox(
 
 if table:
     st.subheader(f"Data {table.replace('_', ' ').title()}")
-    df = get_data(table)
+    df = get_data(table_name=table, schema="raw_taxi")
     
     # Tampilkan Statistik Sederhana
     col1, col2 = st.columns(2)

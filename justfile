@@ -22,10 +22,14 @@ inspect:
 inspect-clean:
     rm -rf ~/.streamlit/cache
     uv run streamlit run inspect_db.py
-    
-# Run Prefect Server
+
+# Start Prefect server (run this in terminal 1)
 server:
     uv run prefect server start
+
+# Start Prefect worker (run this in terminal 2)
+worker:
+    uv run prefect worker start --pool default-agent-pool
 
 # Run Data Ingestion (Step 01)
 ingest:

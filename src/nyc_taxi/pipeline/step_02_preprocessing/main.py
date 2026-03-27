@@ -23,7 +23,7 @@ def preprocess_data():
 def show_table(table_name):
     logger = logging.getLogger(__name__)
     try:
-        df = query_to_df(f"SELECT * FROM raw.{table_name}")
+        df = query_to_df(f"SELECT * FROM raw_taxi.{table_name}")
         pd.set_option('display.max_columns', None)
         pd.set_option('display.width', 1000)
         logger.info(f"✅ Data berhasil dimuat ke DataFrame!")

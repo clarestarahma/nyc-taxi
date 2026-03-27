@@ -4,6 +4,7 @@ import pandas as pd
 from nyc_taxi.utils.duckdb import save_to_raw
 from nyc_taxi.config.settings import TARGET_DATASETS, DOMAIN, START_DATE, END_DATE
 from prefect import task, flow, get_run_logger
+import os
 
 # --- TASKS ---
 
@@ -34,7 +35,7 @@ def save_batch(results, table_name):
     # Ubah ke Pandas & Simpan ke DuckDB
     try:
         df = pd.DataFrame.from_records(results)
-        save_to_raw(df, table_name=table_name)
+        save_to_raw(df, table_name=table_name, schema="raw_taxi")
         return len(df)
     except Exception as e:
         logger.error(f"❌ Gagal menyimpan ke {table_name}: {e}")
@@ -57,31 +58,47 @@ def ingest_taxi_data_flow(dataset_id: str, table_name: str, time_col:str):
 
     logger.info("🚀 Memulai proses Ingestion Masif (Jan-Apr 2023)...")
 
-    for _ in range(2): # ini cuma coba aja, real nya pakai while
-    # while True:
-        results = fetch_batch(client=client, dataset_id=dataset_id, table_name=table_name, time_col=time_col, offset=current_offset)
-            
-        if not results:
-            logger.info(f"🏁 {table_name} selesai ditarik!")
+    while True:
+        try:
+            for _ in range(2): # ini cuma coba aja, real nya pakai while
+            # while True:
+                results = fetch_batch(client=client, dataset_id=dataset_id, table_name=table_name, time_col=time_col, offset=current_offset)
+                    
+                if not results:
+                    logger.info(f"🏁 {table_name} selesai ditarik!")
+                    break
+
+                count = save_batch(results, table_name)
+
+                if count is None:
+                    logger.error(f"🛑 Menghentikan {table_name} karena error database.")
+                    break
+
+                current_offset += count
+                total_pulled += count
+                logger.info(f"📦 Batch selesai. Total sementara: {total_pulled}")
+            logger.info(f"📦 Progress {table_name}: {total_pulled} baris...")
             break
 
-        count = save_batch(results, table_name)
-
-        current_offset += count
-        total_pulled += count
-        logger.info(f"📦 Progress {table_name}: {total_pulled} baris...")
+        except KeyboardInterrupt:
+            raise
 
 @flow(name="NYC Taxi Main Pipeline")
 def ingest_all_taxi_data():
     """Main Flow that regulates all types of taxis"""
-    for table_name, info in TARGET_DATASETS.items():
-        print(f"===== Processing {table_name} =====")
+    logger = get_run_logger()
+    try:
+        for table_name, info in TARGET_DATASETS.items():
+            print(f"===== Processing {table_name} =====")
 
-        ingest_taxi_data_flow(
-            dataset_id=info["dataset_id"],
-            table_name=table_name,
-            time_col=info["time_column"]
-        )
+            ingest_taxi_data_flow(
+                dataset_id=info["dataset_id"],
+                table_name=table_name,
+                time_col=info["time_column"]
+            )
+    except KeyboardInterrupt:
+        logger.warning("\n[!] INTERRUPT DITERIMA. Mematikan sistem...")
+        os._exit(0)
 
 if __name__ == "__main__":
     ingest_all_taxi_data()
