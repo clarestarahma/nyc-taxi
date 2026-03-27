@@ -10,6 +10,10 @@ run-all:
 setup:
     uv sync
 
+# Show all raw file
+all_raw:
+    uv run python -m nyc_taxi.pipeline.step_02_preprocessing.main show
+
 # Run Prefect Server
 server:
     uv run prefect server start
