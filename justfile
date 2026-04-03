@@ -1,8 +1,12 @@
 # ingestion
 mod ingestion "src/nyc_taxi/pipeline/step_01_ingestion/ingestion.just"
+# preprocessing
 mod preprocessing "src/nyc_taxi/pipeline/step_02_preprocessing/preprocessing.just"
+# analysis
 mod analysis "src/nyc_taxi/pipeline/step_03_analysis/analysis.just"
+# predicting
 mod predicting "src/nyc_taxi/pipeline/step_04_predicting/predicting.just"
+# dashboard
 mod dashboard "src/nyc_taxi/pipeline/step_05_dashboard/dashboard.just"
 
 # List all available commands
