@@ -15,7 +15,7 @@ def get_data(*, table_name, schema):
 # Sidebar untuk pilih tabel
 table = st.sidebar.selectbox(
     "Pilih Tabel Mentah:",
-    ["yellow_taxi", "green_taxi", "fhv_taxi", "hvfhv_taxi"]
+    ["yellow_taxi", "green_taxi"]
 )
 
 if table:

@@ -1,3 +1,10 @@
+# ingestion
+mod ingestion "src/nyc_taxi/pipeline/step_01_ingestion/ingestion.just"
+mod preprocessing "src/nyc_taxi/pipeline/step_02_preprocessing/preprocessing.just"
+mod analysis "src/nyc_taxi/pipeline/step_03_analysis/analysis.just"
+mod predicting "src/nyc_taxi/pipeline/step_04_predicting/predicting.just"
+mod dashboard "src/nyc_taxi/pipeline/step_05_dashboard/dashboard.just"
+
 # List all available commands
 default:
     @just --list
@@ -9,10 +16,6 @@ run-all:
 # Setup environment dan install dependencies
 setup:
     uv sync
-
-# Show all raw file
-all_raw:
-    uv run python -m nyc_taxi.pipeline.step_02_preprocessing.main show
 
 # Run the Streamlit dashboard for data inspection (default)
 inspect:
@@ -26,23 +29,3 @@ inspect-clean:
 # Start Prefect server (run this in terminal 1)
 server:
     uv run prefect server start
-
-# Start Prefect worker (run this in terminal 2)
-worker:
-    uv run prefect worker start --pool default-agent-pool
-
-# Run Data Ingestion (Step 01)
-ingest:
-    uv run python -m nyc_taxi.pipeline.step_01_ingestion.main
-
-# Run Data Preprocessing (Step 02)
-process:
-    uv run python -m nyc_taxi.pipeline.step_02_preprocessing.main
-
-# Run Data Storage (Step 03)
-store:
-    uv run python -m nyc_taxi.pipeline.step_03_storage.main
-
-# Run Dashboard (Streamlit agak beda cara panggilnya)
-dashboard:
-    uv run streamlit run src/nyc_taxi/pipeline/step_05_dashboard/app.py

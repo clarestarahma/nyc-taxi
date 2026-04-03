@@ -2,13 +2,14 @@ from nyc_taxi.config import settings
 from sodapy import Socrata
 import pandas as pd
 from nyc_taxi.utils.duckdb import save_to_raw
-from nyc_taxi.config.settings import TARGET_DATASETS, DOMAIN, START_DATE, END_DATE
+from nyc_taxi.config.settings import TARGET_DATASETS, START_DATE, END_DATE
 from prefect import task, flow, get_run_logger
 import os
+import time
 
 # --- TASKS ---
 
-@task(retries=3, retry_delay_seconds=30, name="Fetch Batch From Socrata")
+@task(timeout_seconds=600, retries=3, retry_delay_seconds=30, name="Fetch Batch From Socrata")
 def fetch_batch(*, client: Socrata, dataset_id: str, table_name: str, time_col: str, offset: int):
     """Function for fetch data from API"""
     logger = get_run_logger()
@@ -20,11 +21,11 @@ def fetch_batch(*, client: Socrata, dataset_id: str, table_name: str, time_col: 
         where=f"{time_col} BETWEEN '{START_DATE}' AND '{END_DATE}'",
         limit=settings.DEFAULT_LIMIT,
         offset=offset,
-        # order=f"{time_col} ASC" # supaya urut
+        order=f"{time_col} ASC" # supaya urut
     )
     return results
         
-@task(name="Save Batch to DuckDB")
+@task(timeout_seconds=600, name="Save Batch to DuckDB")
 def save_batch(results, table_name):
     """Function for convert to Pandas and save to DB"""
     if not results:
@@ -60,7 +61,7 @@ def ingest_taxi_data_flow(dataset_id: str, table_name: str, time_col:str):
 
     while True:
         try:
-            for _ in range(2): # ini cuma coba aja, real nya pakai while
+            for _ in range(1): # ini cuma coba aja, real nya pakai while
             # while True:
                 results = fetch_batch(client=client, dataset_id=dataset_id, table_name=table_name, time_col=time_col, offset=current_offset)
                     
@@ -77,6 +78,7 @@ def ingest_taxi_data_flow(dataset_id: str, table_name: str, time_col:str):
                 current_offset += count
                 total_pulled += count
                 logger.info(f"📦 Batch selesai. Total sementara: {total_pulled}")
+                time.sleep(0.5)
             logger.info(f"📦 Progress {table_name}: {total_pulled} baris...")
             break
 
