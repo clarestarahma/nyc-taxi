@@ -6,7 +6,7 @@ untuk mengidentifikasi zona operasi paling menguntungkan dan
 pengaruh jam sibuk terhadap durasi perjalanan.
 
 ## 🏗️ Arsitektur Sistem
-Raw Data → Ingestion → Preprocessing → DuckDB/Parquet → Dashboard
+Raw Data → Ingestion → Preprocessing → Analysis → Prediction → Dashboard
 
 ## 📂 Struktur Folder Proyek
 ```bash
@@ -47,8 +47,9 @@ Perintah lainnya dapat dilihat di file `justfile`
 | Nama | Tugas |
 |------|-------|
 | A    | Ingestion |
-| B    | Preprocessing & Storage |
+| B    | Preprocessing |
 | C    | Analisis & Dashboard |
+| D    | Prediksi & Dashboard |
 ---
 ## 💡 Strategi Branch
 Supaya tidak bentrok antar anggota tim:
