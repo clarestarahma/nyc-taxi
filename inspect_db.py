@@ -1,5 +1,5 @@
 import streamlit as st
-from nyc_taxi.utils.duckdb import query_to_df
+from nyc_taxi.utils.db_utils import query_to_df
 from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 st.set_page_config(page_title="NYC Taxi Data Inspector", layout="wide")
@@ -15,12 +15,17 @@ def get_data(*, table_name, schema):
 # Sidebar untuk pilih tabel
 table = st.sidebar.selectbox(
     "Pilih Tabel Mentah:",
-    ["yellow_taxi", "green_taxi"]
+    ["yellow_taxi", "green_taxi", "weather"]
 )
 
 if table:
     st.subheader(f"Data {table.replace('_', ' ').title()}")
-    df = get_data(table_name=table, schema="raw_taxi")
+    if table == "weather":
+        schema = "raw"
+    else:
+        schema = "raw_taxi"
+
+    df = get_data(table_name=table, schema=schema)
     
     # Tampilkan Statistik Sederhana
     col1, col2 = st.columns(2)

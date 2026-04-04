@@ -1,7 +1,6 @@
-import duckdb
 import pandas as pd
 from nyc_taxi.config import settings
-from nyc_taxi.utils.duckdb import query_to_df
+from nyc_taxi.utils.db_utils import query_to_df
 import logging
 import sys
 from prefect import task, flow

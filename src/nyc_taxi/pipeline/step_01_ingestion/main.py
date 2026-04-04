@@ -1,7 +1,7 @@
 from nyc_taxi.config import settings
 from sodapy import Socrata
 import pandas as pd
-from nyc_taxi.utils.duckdb import save_to_raw
+from nyc_taxi.utils.db_utils import save_to_raw
 from nyc_taxi.config.settings import TARGET_DATASETS, START_DATE, END_DATE
 from prefect import task, get_run_logger
 import os
