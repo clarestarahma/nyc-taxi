@@ -1,5 +1,7 @@
 from prefect import task, flow, get_run_logger
 from nyc_taxi.utils.db_utils import execute_query
+from nyc_taxi.queries.taxi_queries import TaxiQueries
+import pandas as pd
 
 BASE_URL = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 
@@ -39,18 +41,15 @@ def create_table_if_not_exists(table_name: str, sample_url: str, schema: str):
 # =========================
 # TASK: INGEST 1 FILE
 # =========================
-@task(name="Ingest Single Parquet", retries=2, retry_delay_seconds=10)
+@task(name="Ingest Single Parquet", retries=3, retry_delay_seconds=10)
 def ingest_single_parquet(table_name: str, schema: str, url: str):
     logger = get_run_logger()
     target_table = f"{schema}.{table_name}"
 
     logger.info(f"📥 Ingesting {url}")
 
-    query = f"""
-    INSERT INTO {target_table}
-    SELECT * FROM read_parquet('{url}')
-    """
-    execute_query(query=query, df=None)
+    df = pd.read_parquet(url)
+    execute_query(query=TaxiQueries.INSERT.format(target_table=target_table), df=df)
 
     logger.info(f"✅ Done: {url}")
 
@@ -86,6 +85,10 @@ def ingest_taxi_type(taxi_type: str, table_name: str, year: int, months: list[in
 @flow(name="Ingest All Taxi Parquet")
 def ingest_all_taxi_parquet():
     months = [1, 2, 3, 4]  # tinggal extend nanti
-
-    ingest_taxi_type("yellow", "yellow_taxi", 2025, months)
-    ingest_taxi_type("green", "green_taxi", 2025, months)
+    taxi_type = {"yellow": "yellow_taxi", "green": "green_taxi"}
+    
+    try:
+        for type, table_name in taxi_type.items():
+            ingest_taxi_type(type, table_name, 2025, months)
+    except KeyboardInterrupt:
+        raise

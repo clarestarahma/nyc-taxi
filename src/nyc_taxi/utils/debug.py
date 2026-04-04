@@ -1,7 +1,8 @@
 import duckdb
+from nyc_taxi.config.settings import DATABASE_PATH
 
 # LANGSUNG connect tanpa wrapper kamu
-con = duckdb.connect("data/nyc_taxi.db")
+con = duckdb.connect(DATABASE_PATH)
 
 print("=== SCHEMAS ===")
 print(con.execute("SHOW SCHEMAS").fetchall())

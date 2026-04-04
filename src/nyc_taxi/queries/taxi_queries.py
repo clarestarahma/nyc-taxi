@@ -3,7 +3,7 @@ class TaxiQueries:
 
     CREATE_TABLE = "CREATE TABLE IF NOT EXISTS {target_table} AS SELECT * FROM df WHERE 1=0"
     
-    INGEST_YELLOW_TAXI = """
+    INSERT = """
         INSERT INTO {target_table} 
         SELECT * FROM df 
     """

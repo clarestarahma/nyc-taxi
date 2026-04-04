@@ -2,12 +2,22 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+from pathlib import Path
+import os
+
+# 1. Deteksi ROOT Project (Naik 3 tingkat dari config/settings.py)
+# folder: src/nyc_taxi/config/ -> src/nyc_taxi/ -> src/ -> ROOT
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+
+# 2. Tentukan Path Data & DB di ROOT
+DATA_DIR = BASE_DIR / "data"
+DATABASE_PATH = DATA_DIR / "nyc_taxi.db"
 
 DOMAIN = "data.cityofnewyork.us"
 
 # Rentang waktu yang mau diambil
 START_DATE = "2025-01-01T00:00:00"
-END_DATE   = "2025-04-01T23:59:59"
+END_DATE   = "2025-04-30T23:59:59"
 
 # Daftar target dataset dengan metadata-nya
 TARGET_DATASETS = {
@@ -28,10 +38,6 @@ PASSWORD = os.getenv("PASSWORD_OPENDATA")
 
 # Filter Default
 DEFAULT_LIMIT = 50000
-
-RAW_DB_PATH = "data/nyc_taxi.db"
-
-#
 
 # Weather API
 WEATHER_API_URL = "https://archive-api.open-meteo.com/v1/archive"

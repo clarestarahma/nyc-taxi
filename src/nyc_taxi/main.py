@@ -1,6 +1,5 @@
 # from nyc_taxi.pipeline.step_01_ingestion.main import ingest_all_taxi_data
-from nyc_taxi.pipeline.step_01_ingestion.taxi import ingest_all_taxi_parquet
-from nyc_taxi.pipeline.step_01_ingestion.weather import ingest_weather_data
+from nyc_taxi.pipeline.step_01_ingestion.main import ingest_data
 from nyc_taxi.pipeline.step_02_preprocessing.main import preprocess_data
 from nyc_taxi.pipeline.step_03_analysis.main import analysis_data
 from nyc_taxi.pipeline.step_04_predicting.main import predicting_data
@@ -14,8 +13,7 @@ def run_pipeline():
     logger.info("--- 🚕 NYC TAXI DATA PIPELINE INTERNAL BOOTSTRAP 🚕 ---")
     
     # Menjalankan urutan tahap demi tahap
-    ingest_all_taxi_parquet()
-    ingest_weather_data()
+    ingest_data()
     # preprocess_data()
     # analysis_data()
     # predicting_data

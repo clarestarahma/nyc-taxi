@@ -1,16 +1,16 @@
 import duckdb
 import pandas as pd
-from nyc_taxi.config import settings
+from nyc_taxi.config.settings import DATA_DIR, DATABASE_PATH
 import os
 import logging
 from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 def get_connection():
-    if not os.path.exists("data"):
-        os.makedirs("data")
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
         print("📁 Folder 'data' berhasil dibuat otomatis!")
         
-    return duckdb.connect(settings.RAW_DB_PATH)
+    return duckdb.connect(DATABASE_PATH)
 
 def save_to_raw(df: pd.DataFrame, table_name: str, schema: str):
     logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def save_to_raw(df: pd.DataFrame, table_name: str, schema: str):
         
         # 3. Gunakan INSERT INTO daripada append untuk kestabilan antar schema
         # DuckDB bisa langsung baca DataFrame 'df' di dalam query SQL
-        query = TaxiQueries.INGEST_YELLOW_TAXI.format(target_table=target_table)
+        query = TaxiQueries.INSERT.format(target_table=target_table)
         execute_query(query=query, df=df)
         
         logger.info(f"✅ [DB] {table_name} updated successfully.")
@@ -38,11 +38,15 @@ def save_to_raw(df: pd.DataFrame, table_name: str, schema: str):
 
 def execute_query(*, query: str, df: pd.DataFrame):
     """General function for run SQL query without returning data"""
-    with get_connection() as conn:
-        if df is not None:
-            conn.register("df", df)
-        
-        conn.execute(query)
+    try:
+        with get_connection() as conn:
+            if df is not None:
+                conn.register("df", df)
+            
+            conn.execute(query)
+    except KeyboardInterrupt:
+        print('Interupsi. Program dihentikan')
+        raise
 
 def query_to_df(query: str) -> pd.DataFrame:
     """Function for run SELECT and returning Pandas DataFrame"""
