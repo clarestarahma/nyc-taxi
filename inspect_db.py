@@ -21,8 +21,10 @@ table = st.sidebar.selectbox(
 if table:
     st.subheader(f"Data {table.replace('_', ' ').title()}")
     if table == "weather":
+        st.info("📅 Data cuaca harian untuk NYC, termasuk suhu, curah hujan, kecepatan angin, dll.")
         schema = "raw"
     else:
+        st.info("🚕 Data perjalanan taksi NYC, termasuk waktu penjemputan, lokasi, jarak, tarif, dll.")
         schema = "raw_taxi"
 
     df = get_data(table_name=table, schema=schema)
