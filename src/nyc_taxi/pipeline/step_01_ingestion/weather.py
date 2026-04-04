@@ -67,7 +67,7 @@ def save_weather_data(df: pd.DataFrame):
     logger = get_run_logger()
     
     try: 
-        save_to_raw(df=df, table_name="weather", schema="raw")
+        save_to_raw(df=df, table_name="weather", schema="bronze")
         logger.info("✅ Weather data saved to DuckDB successfully.")
     except Exception as e:
         logger.error(f"❌ Failed to save weather data to DuckDB: {e}")

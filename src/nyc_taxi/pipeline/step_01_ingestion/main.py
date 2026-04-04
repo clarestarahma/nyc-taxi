@@ -6,7 +6,7 @@ from prefect import flow
 @flow(name = "Ingest Taxi and Weather Data")
 def ingest_data():
     try:
-        # ingest_all_taxi_parquet()
+        ingest_all_taxi_parquet()
         ingest_weather_data()
     except KeyboardInterrupt:
         print("\n🛑 Program dihentikan paksa oleh user (KeyboardInterrupt)")

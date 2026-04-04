@@ -60,7 +60,7 @@ def ingest_single_parquet(table_name: str, schema: str, url: str):
 @flow(name="Ingest Taxi Parquet Per Type")
 def ingest_taxi_type(taxi_type: str, table_name: str, year: int, months: list[int]):
     logger = get_run_logger()
-    schema = "raw_taxi"
+    schema = "bronze"
 
     urls = generate_urls(taxi_type, year, months)
 
