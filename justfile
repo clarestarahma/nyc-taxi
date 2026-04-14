@@ -9,6 +9,8 @@ mod predicting "src/nyc_taxi/pipeline/step_04_predicting/predicting.just"
 # dashboard
 mod dashboard "src/nyc_taxi/pipeline/step_05_dashboard/dashboard.just"
 
+set shell:=["powershell.exe", "-c"]
+
 # List all available commands
 default:
     @just --list
