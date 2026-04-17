@@ -5,6 +5,11 @@ import logging
 import sys
 from prefect import task, flow
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+
 def preprocess_data():
     """
     Fungsi untuk membersihkan data mentah menggunakan SQL/DuckDB.
@@ -19,95 +24,13 @@ def preprocess_data():
     # CREATING SCHEMA SILVER
     # =========================
     query_to_df("CREATE SCHEMA IF NOT EXISTS silver")
-
-    # =========================
-    # CLEANING: YELLOW TAXI
-    # =========================
-    query_yellow = """
-    CREATE OR REPLACE TABLE silver.yellow_trips AS
-    SELECT
-        CAST(tpep_pickup_datetime AS TIMESTAMP) AS tpep_pickup_datetime,
-        CAST(tpep_dropoff_datetime AS TIMESTAMP) AS tpep_dropoff_datetime,
-        CAST(PULocationID AS INTEGER) AS pulocationid,
-        CAST(DOLocationID AS INTEGER) AS dolocationid,
-
-        COALESCE(trip_distance, 0)::FLOAT AS trip_distance,
-        COALESCE(fare_amount, 0)::FLOAT AS fare_amount,
-        COALESCE(tip_amount, 0)::FLOAT AS tip_amount,
-        COALESCE(total_amount, 0)::FLOAT AS total_amount,
-        COALESCE(passenger_count, 1)::INTEGER AS passenger_count,
-
-        -- duration
-        (epoch(tpep_dropoff_datetime) - epoch(tpep_pickup_datetime))/60 AS trip_duration_min
-
-    FROM bronze.yellow_taxi
-    WHERE
-        tpep_pickup_datetime IS NOT NULL
-        AND tpep_dropoff_datetime IS NOT NULL
-        AND tpep_dropoff_datetime > tpep_pickup_datetime
-    """
-
-    query_to_df(query_yellow)
-
-
-    # =========================
-    # CLEANING: GREEN TAXI
-    # =========================
-    query_green = """
-    CREATE OR REPLACE TABLE silver.green_trips AS
-    SELECT
-        CAST(lpep_pickup_datetime AS TIMESTAMP) AS lpep_pickup_datetime,
-        CAST(lpep_dropoff_datetime AS TIMESTAMP) AS lpep_dropoff_datetime,
-        CAST(PULocationID AS INTEGER) AS pulocationid,
-        CAST(DOLocationID AS INTEGER) AS dolocationid,
-
-        COALESCE(trip_distance, 0)::FLOAT AS trip_distance,
-        COALESCE(fare_amount, 0)::FLOAT AS fare_amount,
-        COALESCE(tip_amount, 0)::FLOAT AS tip_amount,
-        COALESCE(total_amount, 0)::FLOAT AS total_amount,
-        COALESCE(passenger_count, 1)::INTEGER AS passenger_count,
-
-        (epoch(lpep_dropoff_datetime) - epoch(lpep_pickup_datetime))/60 AS trip_duration_min
-
-    FROM bronze.green_taxi
-    WHERE
-        lpep_pickup_datetime IS NOT NULL
-        AND lpep_dropoff_datetime IS NOT NULL
-        AND lpep_dropoff_datetime > lpep_pickup_datetime
-    """
-
-    query_to_df(query_green)
-
-
-    # =========================
-    # REMOVING OUTLIER
-    # =========================
-    query_outlier_yellow = """
-    DELETE FROM silver.yellow_trips
-    WHERE trip_distance <= 0
-    OR fare_amount < 0
-    OR total_amount < 0
-    OR trip_duration_min <= 0
-    OR trip_duration_min > 180
-    """
-
-    query_to_df(query_outlier_yellow)
-
-    query_outlier_green = """
-    DELETE FROM silver.green_trips
-    WHERE trip_distance <= 0
-    OR fare_amount < 0
-    OR total_amount < 0
-    OR trip_duration_min <= 0
-    OR trip_duration_min > 180
-    """
-
-    query_to_df(query_outlier_green)
+    logger.info("✅ Schema silver siap.")
 
 
     # =========================
     # CLEANING: WEATHER
     # =========================
+    logger.info("☁️ Memulai cleaning weather data...")
     query_weather = """
     CREATE OR REPLACE TABLE silver.weather AS
     SELECT
@@ -132,8 +55,7 @@ def preprocess_data():
     """
 
     query_to_df(query_weather)
-
-    print("✅ [02_PREPROCESSING] Data telah bersih dan siap untuk disimpan.")
+    logger.info("✅ Cleaning weather selesai dan disimpan ke silver.weather.")
 
 # =========================
 # CHECKING & SHOWING CLEANED DATA
