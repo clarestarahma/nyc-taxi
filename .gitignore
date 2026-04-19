@@ -229,3 +229,7 @@ __pycache__/
 .vscode/
 .idea/
 *.db.wal
+
+data/*
+
+kaggle.json

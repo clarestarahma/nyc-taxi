@@ -12,24 +12,24 @@ def get_connection():
         
     return duckdb.connect(DATABASE_PATH)
 
-def save_to_raw(df: pd.DataFrame, table_name: str, schema: str):
+def save_to_db(df: pd.DataFrame, table_name: str, schema: str):
     logger = logging.getLogger(__name__)
     target_table = f"{schema}.{table_name}"
     try:
         # 1. Pastikan Schema & Tabel ada (Auto-commit DDL)
         query = TaxiQueries.CREATE_SCHEMA.format(schema_name=schema)
-        execute_query(query=query, df=None)
+        execute_query(query=query)
 
         # Buat tabel kosong jika belum ada
         query = TaxiQueries.CREATE_TABLE.format(target_table=target_table)
-        execute_query(query=query, df=df)
+        query_to_df(query=query, df=df)
         
         logger.info(f"📥 [DB] Menambahkan {len(df)} baris ke {target_table}...")
         
         # 3. Gunakan INSERT INTO daripada append untuk kestabilan antar schema
         # DuckDB bisa langsung baca DataFrame 'df' di dalam query SQL
         query = TaxiQueries.INSERT.format(target_table=target_table)
-        execute_query(query=query, df=df)
+        query_to_df(query=query, df=df)
         
         logger.info(f"✅ [DB] {table_name} updated successfully.")
         
@@ -48,7 +48,12 @@ def execute_query(*, query: str, df: pd.DataFrame):
         print('Interupsi. Program dihentikan')
         raise
 
-def query_to_df(query: str) -> pd.DataFrame:
+def query_to_df(query: str, df: pd.DataFrame) -> pd.DataFrame:
     """Function for run SELECT and returning Pandas DataFrame"""
     with get_connection() as conn:
         return conn.execute(query).df()
+    
+def execute_query(query: str):
+    """Function for run SELECT and returning Pandas DataFrame"""
+    with get_connection() as conn:
+        conn.execute(query)

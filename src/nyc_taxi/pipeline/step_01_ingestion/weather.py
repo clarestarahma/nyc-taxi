@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from prefect import task, flow, get_run_logger
-from nyc_taxi.utils.db_utils import save_to_raw
+from nyc_taxi.utils.db_utils import save_to_db
 from nyc_taxi.config.settings import (
     WEATHER_API_URL,
     NYC_LATITUDE,
@@ -67,7 +67,7 @@ def save_weather_data(df: pd.DataFrame):
     logger = get_run_logger()
     
     try: 
-        save_to_raw(df=df, table_name="weather", schema="bronze")
+        save_to_db(df=df, table_name="weather", schema="bronze")
         logger.info("✅ Weather data saved to DuckDB successfully.")
     except Exception as e:
         logger.error(f"❌ Failed to save weather data to DuckDB: {e}")
