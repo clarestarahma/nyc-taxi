@@ -11,6 +11,10 @@ mod predicting "src/nyc_taxi/pipeline/step_04_predicting/predicting.just"
 # dashboard
 mod dashboard "src/nyc_taxi/pipeline/step_05_dashboard/dashboard.just"
 
+<<<<<<< Updated upstream
+=======
+set shell := ["powershell.exe", "-c"]
+>>>>>>> Stashed changes
 
 # List all available commands
 default:
