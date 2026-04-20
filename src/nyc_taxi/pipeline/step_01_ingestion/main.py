@@ -1,13 +1,17 @@
 from nyc_taxi.pipeline.step_01_ingestion.taxi import ingest_all_taxi_parquet
 from nyc_taxi.pipeline.step_01_ingestion.weather import ingest_weather_data
+from nyc_taxi.pipeline.step_01_ingestion.zone_lookup import ingest_zone_lookup
 
 from prefect import flow
+from nyc_taxi.utils.db_utils import execute_query
+
 
 @flow(name = "Ingest Taxi and Weather Data")
 def ingest_data():
     try:
         ingest_all_taxi_parquet()
         ingest_weather_data()
+        ingest_zone_lookup()
     except KeyboardInterrupt:
         print("\n🛑 Program dihentikan paksa oleh user (KeyboardInterrupt)")
         return

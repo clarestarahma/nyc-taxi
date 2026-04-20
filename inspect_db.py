@@ -1,26 +1,36 @@
 import streamlit as st
+import duckdb
+from pathlib import Path
 from nyc_taxi.utils.db_utils import query_to_df
 from nyc_taxi.queries.taxi_queries import TaxiQueries
+from nyc_taxi.config.settings import DATA_DIR
 
 st.set_page_config(page_title="NYC Taxi Data Inspector", layout="wide")
 
-st.title("🚖 NYC Taxi - Raw Data Inspector")
+st.title("🚖 NYC Taxi - Silver Data Inspector")
 
 def get_data(*, table_name, schema):
     target_table = f"{schema}.{table_name}"
     query = TaxiQueries.GET_ALL_DATA.format(target_table=target_table)
-    df = query_to_df(query=query)
-    return df
+    try:
+        return query_to_df(query=query)
+    except Exception:
+        fallback_path = Path(DATA_DIR) / "silver" / table_name
+        if fallback_path.exists():
+            return duckdb.connect().execute(
+                f"SELECT * FROM read_parquet('{fallback_path.as_posix()}')"
+            ).df()
+        raise
 
 # Sidebar untuk pilih tabel
 table = st.sidebar.selectbox(
-    "Pilih Tabel Mentah:",
-    ["yellow_taxi", "green_taxi", "weather"]
+    "Pilih Tabel Silver:",
+    ["yellow_trips", "green_trips", "weather"]
 )
 
 if table:
     st.subheader(f"Data {table.replace('_', ' ').title()}")
-    schema = "bronze"
+    schema = "silver"
     if table == "weather":
         st.info("📅 Data cuaca harian untuk NYC, termasuk suhu, curah hujan, kecepatan angin, dll.")
     else:
