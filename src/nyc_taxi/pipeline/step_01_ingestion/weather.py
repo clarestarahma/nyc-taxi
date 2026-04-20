@@ -2,10 +2,6 @@ import requests
 import pandas as pd
 import json
 from prefect import task, flow, get_run_logger
-<<<<<<< Updated upstream
-from nyc_taxi.utils.db_utils import save_to_db
-=======
->>>>>>> Stashed changes
 from nyc_taxi.config.settings import (
     STATIC_DIR,
     WEATHER_API_URL,
@@ -90,18 +86,12 @@ def save_raw_weather_json(data: dict):
 def save_weather_data(df: pd.DataFrame):
     logger = get_run_logger()
     
-<<<<<<< Updated upstream
-    try: 
-        save_to_db(df=df, table_name="weather", schema="bronze")
-        logger.info("✅ Weather data saved to DuckDB successfully.")
-=======
     try:
         STATIC_DIR.mkdir(parents=True, exist_ok=True)
         file_path = STATIC_DIR / "weather.csv"
         df.to_csv(file_path, index=False, encoding="utf-8")
 
         logger.info(f"✅ Weather data saved to {file_path.resolve()}")
->>>>>>> Stashed changes
     except Exception as e:
         logger.error(f"❌ Failed to save weather data to {file_path}: {e}")
         raise
