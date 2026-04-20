@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 # 2. Tentukan Path Data & DB di ROOT
 DATA_DIR = BASE_DIR / "data"
+STATIC_DIR = DATA_DIR / "static"
 DATABASE_PATH = DATA_DIR / "nyc_taxi.db"
 
 DOMAIN = "data.cityofnewyork.us"

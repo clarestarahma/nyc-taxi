@@ -1,5 +1,9 @@
 import pandas as pd
+import json
+import duckdb
 from nyc_taxi.config import settings
+from nyc_taxi.config.settings import STATIC_DIR
+from nyc_taxi.config.settings import DATABASE_PATH
 from nyc_taxi.utils.db_utils import execute_query
 import logging
 import sys
@@ -9,6 +13,56 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
+
+def read_weather_json():
+    logger = logging.getLogger(__name__)
+    file_path = STATIC_DIR / "weather_raw.json"
+    
+    if not file_path.exists():
+        logger.error(f"❌ File {file_path} tidak ditemukan. Pastikan data sudah di-fetch dan disimpan.")
+        raise FileNotFoundError(f"File {file_path} tidak ditemukan.")
+    
+    try:
+        with file_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        logger.info(f"✅ Raw weather JSON berhasil dibaca dari {file_path.resolve()}")
+        return data
+    except Exception as e:
+        logger.error(f"❌ Gagal membaca raw weather JSON dari {file_path}: {e}")
+        raise
+
+def transform_weather_data(data: dict) -> pd.DataFrame:
+    logger = logging.getLogger(__name__)
+    try:
+        daily_data = data.get("daily", {})
+        df = pd.DataFrame({
+            "date": pd.to_datetime(daily_data.get("time")),
+            "temperature_max": daily_data.get("temperature_2m_max"),
+            "temperature_min": daily_data.get("temperature_2m_min"),
+            "precipitation": daily_data.get("precipitation_sum"),
+            "wind_speed_max": daily_data.get("windspeed_10m_max"),
+            "weather_code": daily_data.get("weathercode")
+        })
+        logger.info(f"✅ Raw weather JSON berhasil diubah menjadi DataFrame dengan shape {df.shape}")
+        return df
+    except Exception as e:
+        logger.error(f"❌ Gagal mengubah raw weather JSON menjadi DataFrame: {e}")
+        raise
+
+def load_weather_to_silver(df: pd.DataFrame):
+    logger = logging.getLogger(__name__)
+    try:
+        execute_query("CREATE SCHEMA IF NOT EXISTS silver")
+        query = "CREATE OR REPLACE TABLE silver.weather AS SELECT * FROM df"
+        
+        with duckdb.connect(database=DATABASE_PATH) as conn:
+            conn.register("df", df)
+            conn.execute(query)
+
+        logger.info("✅ Weather data berhasil dimuat ke silver.weather.")
+    except Exception as e:
+        logger.error(f"❌ Gagal memuat weather data ke silver.weather: {e}")
+        raise
 
 def preprocess_data():
     """
@@ -20,9 +74,13 @@ def preprocess_data():
     """
     FUNCTION FOR PREPROCESSING
     """
+    logger.info("Membaca raw weather JSON...")
+    weather_json = read_weather_json()
+    weather_df = transform_weather_data(weather_json)
     # =========================
     # CREATING SCHEMA SILVER
     # =========================
+    logger.info("Memulai cleaning dan loading data ke silver...")
     execute_query("CREATE SCHEMA IF NOT EXISTS silver")
     logger.info("✅ Schema silver siap.")
 
@@ -51,10 +109,12 @@ def preprocess_data():
             ELSE 'other'
         END AS weather_category
 
-    FROM bronze.weather
+    FROM df
     """
+    with duckdb.connect(database=DATABASE_PATH) as conn:
+        conn.register("df", weather_df)
+        conn.execute(query_weather)
 
-    execute_query(query_weather)
     logger.info("✅ Cleaning weather selesai dan disimpan ke silver.weather.")
 
 # =========================
