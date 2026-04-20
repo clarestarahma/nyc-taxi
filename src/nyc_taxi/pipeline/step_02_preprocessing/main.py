@@ -4,9 +4,9 @@ from .preprocessing.preprocessing_taxi import preprocess_all_data as taxi_prepro
 from prefect import flow
 
 @flow(name="Preprocessing and saving to duckdb")
-def main():
+def preprocessing_data():
     weather_preprocess_data()
     taxi_preprocess_data()
 
 if __name__ == '__main__':
-    main()
+    preprocessing_data()

@@ -1,6 +1,6 @@
 # from nyc_taxi.pipeline.step_01_ingestion.main import ingest_all_taxi_data
 from nyc_taxi.pipeline.step_01_ingestion.main import ingest_data
-from nyc_taxi.pipeline.step_02_preprocessing.preprocessing.preprocessing_weather import preprocess_data
+from nyc_taxi.pipeline.step_02_preprocessing.main import preprocessing_data
 from nyc_taxi.pipeline.step_03_analysis.main import analysis_data
 from nyc_taxi.pipeline.step_04_predicting.main import predicting_data
 
@@ -14,7 +14,7 @@ def run_pipeline():
     
     # Menjalankan urutan tahap demi tahap
     ingest_data()
-    preprocess_data()
+    preprocessing_data()
     # analysis_data()
     # predicting_data
 
