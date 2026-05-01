@@ -7,12 +7,18 @@ import os
 
 # 1. Deteksi ROOT Project (Naik 3 tingkat dari config/settings.py)
 # folder: src/nyc_taxi/config/ -> src/nyc_taxi/ -> src/ -> ROOT
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+ROOT_DIR = Path(__file__).resolve().parents[3]
 
 # 2. Tentukan Path Data & DB di ROOT
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = ROOT_DIR / "data"
+BRONZE_DIR = DATA_DIR / "bronze"
 STATIC_DIR = DATA_DIR / "static"
+NYC_TAXI_DIR = ROOT_DIR / "src" / "nyc_taxi"
+
 DATABASE_PATH = DATA_DIR / "nyc_taxi.db"
+PATH_ZONE_LOOKUP = STATIC_DIR / "taxi_zone_lookup.csv"
+PATH_WEATHER_RAW = STATIC_DIR / "weather_raw.json"
+PATH_GEOJSON = ROOT_DIR / "data" / "static" / "NYC Taxi Zones.geojson"
 
 DOMAIN = "data.cityofnewyork.us"
 

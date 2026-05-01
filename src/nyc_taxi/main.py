@@ -15,7 +15,7 @@ def run_pipeline():
     # Menjalankan urutan tahap demi tahap
     ingest_data()
     preprocessing_data()
-    # analysis_data()
+    analysis_data()
     # predicting_data
 
     

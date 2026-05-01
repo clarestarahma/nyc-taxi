@@ -632,6 +632,20 @@ wheels = [
 ]
 
 [[package]]
+name = "duckdb-engine"
+version = "0.17.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "duckdb" },
+    { name = "packaging" },
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/89/d5/c0d8d0a4ca3ffea92266f33d92a375e2794820ad89f9be97cf0c9a9697d0/duckdb_engine-0.17.0.tar.gz", hash = "sha256:396b23869754e536aa80881a92622b8b488015cf711c5a40032d05d2cf08f3cf", size = 48054, upload-time = "2025-03-29T09:49:17.663Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/a2/e90242f53f7ae41554419b1695b4820b364df87c8350aa420b60b20cab92/duckdb_engine-0.17.0-py3-none-any.whl", hash = "sha256:3aa72085e536b43faab635f487baf77ddc5750069c16a2f8d9c6c3cb6083e979", size = 49676, upload-time = "2025-03-29T09:49:15.564Z" },
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1503,13 +1517,16 @@ source = { editable = "." }
 dependencies = [
     { name = "dbutils" },
     { name = "duckdb" },
+    { name = "duckdb-engine" },
     { name = "folium" },
     { name = "geopandas" },
     { name = "ipykernel" },
     { name = "kaggle" },
     { name = "matplotlib" },
     { name = "pandas" },
+    { name = "plotly" },
     { name = "prefect" },
+    { name = "pugsql" },
     { name = "pyarrow" },
     { name = "python-dotenv" },
     { name = "seaborn" },
@@ -1521,13 +1538,16 @@ dependencies = [
 requires-dist = [
     { name = "dbutils", specifier = ">=3.1.2" },
     { name = "duckdb", specifier = ">=1.5.1" },
+    { name = "duckdb-engine", specifier = ">=0.17.0" },
     { name = "folium", specifier = ">=0.20.0" },
     { name = "geopandas", specifier = ">=1.1.3" },
     { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "kaggle", specifier = ">=2.0.1" },
     { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "pandas", specifier = ">=2.3.3" },
+    { name = "plotly", specifier = ">=6.7.0" },
     { name = "prefect", specifier = ">=3.6.23" },
+    { name = "pugsql", specifier = ">=0.3.7" },
     { name = "pyarrow", specifier = ">=23.0.1" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "seaborn", specifier = ">=0.13.2" },
@@ -1742,6 +1762,19 @@ wheels = [
 ]
 
 [[package]]
+name = "plotly"
+version = "6.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "narwhals" },
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3a/7f/0f100df1172aadf88a929a9dbb902656b0880ba4b960fe5224867159d8f4/plotly-6.7.0.tar.gz", hash = "sha256:45eea0ff27e2a23ccd62776f77eb43aa1ca03df4192b76036e380bb479b892c6", size = 6911286, upload-time = "2026-04-09T20:36:45.738Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/ad/cba91b3bcf04073e4d1655a5c1710ef3f457f56f7d1b79dcc3d72f4dd912/plotly-6.7.0-py3-none-any.whl", hash = "sha256:ac8aca1c25c663a59b5b9140a549264a5badde2e057d79b8c772ae2920e32ff0", size = 9898444, upload-time = "2026-04-09T20:36:39.812Z" },
+]
+
+[[package]]
 name = "pluggy"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1887,6 +1920,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/20/e5/16ff212c1e452235a90aeb09066144d0c5a6a8c0834397e03f5224495c4e/ptyprocess-0.7.0.tar.gz", hash = "sha256:5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220", size = 70762, upload-time = "2020-12-28T15:15:30.155Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/22/a6/858897256d0deac81a172289110f31629fc4cee19b6f01283303e18c8db3/ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35", size = 13993, upload-time = "2020-12-28T15:15:28.35Z" },
+]
+
+[[package]]
+name = "pugsql"
+version = "0.3.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0d/9d/24ec72b248e7c43f4e0373aa01e3d596dc96d14a99629b856e5d4cdc4edc/pugsql-0.3.7.tar.gz", hash = "sha256:899efc5000854bcd1d3ecda65e7eb0e08679716dacf175cc2191c9c2f2f82615", size = 11971, upload-time = "2025-12-04T18:38:44.82Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2b/9b/0f6dfddc4dcc6fc6280be75f865ced3bfb00eaed6e05586d85e5814a7a70/pugsql-0.3.7-py3-none-any.whl", hash = "sha256:c03729d4ef741c4d943838cfce4faa93d531a4ebd9caa38f69550d079e748229", size = 14767, upload-time = "2025-12-04T18:38:43.435Z" },
 ]
 
 [[package]]

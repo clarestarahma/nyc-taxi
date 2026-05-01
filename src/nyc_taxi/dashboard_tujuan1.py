@@ -19,7 +19,7 @@ st.set_page_config(
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 ZONE_PATH = ROOT_DIR / "data" / "gold" / "zone_profitability.csv"
-GEOJSON_PATH = ROOT_DIR / "data" / "static" / "taxi_zones.geojson"
+GEOJSON_PATH = ROOT_DIR / "data" / "static" / "NYC Taxi Zones.geojson"
 
 METRIC_LABELS = {
     "total_revenue": "Total Revenue",
