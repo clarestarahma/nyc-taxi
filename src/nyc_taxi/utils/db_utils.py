@@ -13,15 +13,11 @@ from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 
 def get_connection():
-    os.makedirs(DATA_DIR, exist_ok=True)
-
-    tmp_dir = os.path.join(DATA_DIR, ".duckdb_tmp")
-    os.makedirs(tmp_dir, exist_ok=True)
-
-    conn = duckdb.connect(DATABASE_PATH)
-    conn.execute(f"SET temp_directory='{tmp_dir}'")
-
-    return conn
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
+        print("📁 Folder 'data' berhasil dibuat otomatis!")
+        
+    return duckdb.connect(DATABASE_PATH)
 
 def save_to_db(df: pd.DataFrame, table_name: str, schema: str):
     logger = logging.getLogger(__name__)
