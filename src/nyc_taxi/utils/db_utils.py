@@ -7,7 +7,6 @@ import streamlit as st
 import pandas as pd
 import json
 import duckdb
-import pugsql
 from pathlib import Path
 
 from nyc_taxi.queries.taxi_queries import TaxiQueries
@@ -21,21 +20,24 @@ def get_connection():
     return duckdb.connect(DATABASE_PATH)
 
 def save_to_db(df: pd.DataFrame, table_name: str, schema: str):
+    """
+    Simpan dataframe ke DuckDB pada schema dan table tertentu.
+    Menggunakan CREATE OR REPLACE agar tabel silver/gold diperbarui setiap pipeline dijalankan.
+    """
     logger = logging.getLogger(__name__)
     target_table = f"{schema}.{table_name}"
 
     try:
         with get_connection() as conn:
-
-            # buat schema
+            # Pastikan schema tersedia
             conn.execute(
                 TaxiQueries.CREATE_SCHEMA.format(schema_name=schema)
             )
 
-            # register dataframe sementara
+            # Register dataframe agar bisa dibaca DuckDB
             conn.register("df", df)
 
-            # buat / replace table
+            # Simpan dataframe ke tabel DuckDB
             conn.execute(f"""
                 CREATE OR REPLACE TABLE {target_table} AS
                 SELECT * FROM df
@@ -45,15 +47,18 @@ def save_to_db(df: pd.DataFrame, table_name: str, schema: str):
 
     except Exception as e:
         logger.error(f"❌ [DB] Gagal simpan ke DuckDB ({target_table}): {e}")
+        raise
 
 def query_to_df(query: str) -> pd.DataFrame:
     """Function for run SELECT and returning Pandas DataFrame"""
     with get_connection() as conn:
         return conn.execute(query).df()
     
-def execute_query(query: str):
-    """Function for run SELECT and returning Pandas DataFrame"""
-    with get_connection() as conn:
+def execute_query(query: str, conn=None):
+    if conn is None:
+        with get_connection() as c:
+            c.execute(query)
+    else:
         conn.execute(query)
 
 # =========================
