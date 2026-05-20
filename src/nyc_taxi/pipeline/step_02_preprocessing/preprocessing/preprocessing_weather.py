@@ -4,7 +4,7 @@ import duckdb
 from nyc_taxi.config import settings
 from nyc_taxi.config.settings import STATIC_DIR
 from nyc_taxi.config.settings import DATABASE_PATH
-from nyc_taxi.utils.db_utils import execute_query
+from nyc_taxi.utils.db_utils import execute_query, get_connection
 import logging
 import sys
 from prefect import task, flow
@@ -55,7 +55,7 @@ def load_weather_to_silver(df: pd.DataFrame):
         execute_query("CREATE SCHEMA IF NOT EXISTS silver")
         query = "CREATE OR REPLACE TABLE silver.weather AS SELECT * FROM df"
         
-        with duckdb.connect(database=DATABASE_PATH) as conn:
+        with get_connection() as conn:
             conn.register("df", df)
             conn.execute(query)
 
@@ -111,7 +111,7 @@ def preprocess_data():
 
     FROM df
     """
-    with duckdb.connect(database=DATABASE_PATH) as conn:
+    with get_connection() as conn:
         conn.register("df", weather_df)
         conn.execute(query_weather)
 

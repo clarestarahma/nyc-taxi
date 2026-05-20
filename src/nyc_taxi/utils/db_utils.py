@@ -26,7 +26,6 @@ def get_connection():
         return duckdb.connect(f"md:nyc_taxi_cloud?motherduck_token={token}")
     
     else:
-        # TEMA LOKAL (Laptop Kamu): Konek ke file .db lokal seperti biasa
         if not os.path.exists(DATA_DIR):
             os.makedirs(DATA_DIR)
             print("📁 Folder 'data' berhasil dibuat otomatis!")
