@@ -16,7 +16,7 @@ def run_pipeline():
     ingest_data()
     preprocessing_data()
     analysis_data()
-    # predicting_data
+    # predicting_data -> model sudah dilatih
 
     
     logger.info("--- ✅ ALL INTERNAL STAGES COMPLETED ---")

@@ -20,6 +20,10 @@ PATH_ZONE_LOOKUP = STATIC_DIR / "taxi_zone_lookup.csv"
 PATH_WEATHER_RAW = STATIC_DIR / "weather_raw.json"
 PATH_GEOJSON = ROOT_DIR / "data" / "static" / "NYC Taxi Zones.geojson"
 
+MODEL_PATH = ROOT_DIR / "models" / "trip_predictor.pkl"
+FEATURES_PATH = ROOT_DIR / "models" / "trip_predictor_features.pkl"
+METRICS_PATH = ROOT_DIR / "models" / "trip_predictor_metrics.pkl"
+
 DOMAIN = "data.cityofnewyork.us"
 
 # Rentang waktu yang mau diambil

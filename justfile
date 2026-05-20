@@ -12,6 +12,10 @@ mod predicting "src/nyc_taxi/pipeline/step_04_predicting/predicting.just"
 mod dashboard "src/nyc_taxi/pipeline/step_05_dashboard/dashboard.just"
 
 
+# Run Streamlit App
+run:
+    uv run streamlit run src/nyc_taxi/streamlit_app.py
+
 # List all available commands
 default:
     @just --list
