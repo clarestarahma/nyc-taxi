@@ -78,9 +78,11 @@ def execute_query(query: str, conn=None):
 # HELPERS
 # =========================
 @st.cache_data
-def load_zone_data(path: Path) -> pd.DataFrame:
-    if not path.exists():
-        raise FileNotFoundError(f"File tidak ditemukan: {path}")
+def load_zone_data() -> pd.DataFrame:
+    sql_file = NYC_TAXI_DIR / "queries" / "silver_to_gold_profitability.sql"
+
+    if not sql_file.exists():
+        raise FileNotFoundError(f"File sql tidak ditemukan: {sql_file}")
 
     sql_file = NYC_TAXI_DIR / "queries" / "silver_to_gold_profitability.sql"
 
