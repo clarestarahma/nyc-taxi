@@ -1,7 +1,8 @@
-import sys
-import os
+from pathlib import Path
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+
+root_path = Path(__file__).resolve().parent
+src_path = root_path / "src"
 
 try:
     from nyc_taxi.pipeline.step_05_dashboard.app import streamlit_pages
