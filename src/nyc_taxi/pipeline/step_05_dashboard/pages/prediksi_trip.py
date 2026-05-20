@@ -5,11 +5,12 @@ import pandas as pd
 import streamlit as st
 
 from nyc_taxi.utils.db_utils import query_to_df
+from nyc_taxi.config.settings import MODEL_PATH, FEATURES_PATH, METRICS_PATH
 
 
-MODEL_PATH = Path("models/trip_predictor.pkl")
-FEATURES_PATH = Path("models/trip_predictor_features.pkl")
-METRICS_PATH = Path("models/trip_predictor_metrics.pkl")
+# MODEL_PATH = Path("models/trip_predictor.pkl")
+# FEATURES_PATH = Path("models/trip_predictor_features.pkl")
+# METRICS_PATH = Path("models/trip_predictor_metrics.pkl")
 
 
 @st.cache_resource
