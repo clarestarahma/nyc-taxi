@@ -17,7 +17,7 @@ def render_page():
     # =========================
     # LOAD DATA
     # =========================
-    df = load_zone_data(DATABASE_PATH)
+    df = load_zone_data()
     
     try:
         geo_data = load_geojson(PATH_GEOJSON)
