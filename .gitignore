@@ -230,6 +230,10 @@ __pycache__/
 .idea/
 *.db.wal
 
-data/*
+data/*.db
+
+data/gold
+data/bronze
+data/.duckdb_tmp
 
 kaggle.json

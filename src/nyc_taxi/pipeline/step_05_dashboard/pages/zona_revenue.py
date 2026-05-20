@@ -15,7 +15,7 @@ def render_page():
     st.info("💡 **Tips:** Perhatikan perbedaan antara **Total Revenue** (Volume) dan **Average Fare** (Kualitas). Zona dengan trip sedikit bisa jadi punya rata-rata tarif yang sangat tinggi!")
 
     # =========================
-    # LOAD DATA
+    # LOAD DATA 
     # =========================
     df = load_zone_data()
     
