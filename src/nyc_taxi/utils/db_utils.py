@@ -12,12 +12,26 @@ from pathlib import Path
 from nyc_taxi.queries.taxi_queries import TaxiQueries
 
 
-def get_connection():
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
-        print("📁 Folder 'data' berhasil dibuat otomatis!")
+# def get_connection():
+#     if not os.path.exists(DATA_DIR):
+#         os.makedirs(DATA_DIR)
+#         print("📁 Folder 'data' berhasil dibuat otomatis!")
         
-    return duckdb.connect(DATABASE_PATH)
+#     return duckdb.connect(DATABASE_PATH)
+
+def get_connection():
+    token = st.secrets.get("MOTHERDUCK_TOKEN")
+    
+    if token:
+        return duckdb.connect(f"md:nyc_taxi_cloud?motherduck_token={token}")
+    
+    else:
+        # TEMA LOKAL (Laptop Kamu): Konek ke file .db lokal seperti biasa
+        if not os.path.exists(DATA_DIR):
+            os.makedirs(DATA_DIR)
+            print("📁 Folder 'data' berhasil dibuat otomatis!")
+            
+        return duckdb.connect(DATABASE_PATH)
 
 def save_to_db(df: pd.DataFrame, table_name: str, schema: str):
     """

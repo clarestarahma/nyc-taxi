@@ -1548,7 +1548,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "dbutils", specifier = ">=3.1.2" },
-    { name = "duckdb", specifier = ">=1.5.1" },
+    { name = "duckdb", extras = ["motherduck"], specifier = ">=1.5.1" },
     { name = "duckdb-engine", specifier = ">=0.17.0" },
     { name = "folium", specifier = ">=0.20.0" },
     { name = "geopandas", specifier = ">=1.1.3" },

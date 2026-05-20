@@ -9,7 +9,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "dbutils>=3.1.2",
-    "duckdb>=1.5.1",
+    "duckdb[motherduck]>=1.5.1",
     "duckdb-engine>=0.17.0",
     "folium>=0.20.0",
     "geopandas>=1.1.3",
