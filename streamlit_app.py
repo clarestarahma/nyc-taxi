@@ -4,9 +4,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 try:
-    # Jika dashboard kamu punya fungsi main()
-    from nyc_taxi.pipeline.step_05_dashboard.app import main
-    main()
+    from nyc_taxi.pipeline.step_05_dashboard.app import streamlit_pages
+    streamlit_pages()
     
     # ATAU jika ingin langsung menjalankan file tersebut:
     # with open("src/nyc_taxi/pipeline/step_05_dashboard/app.py") as f:
