@@ -8,22 +8,17 @@ def render_top_zones_chart(df, metric, metric_label, top_n):
     zone_data = df.groupby(['zone', 'borough'])[metric].sum().reset_index() if "average" not in metric.lower() \
                 else df.groupby(['zone', 'borough'])[metric].mean().reset_index()
 
-    # Ambil 10 data terbesar untuk metrik tersebut
     top_zones = zone_data.nlargest(top_n, metric)
 
-    # Tentukan apakah metrik ini bersifat rata-rata atau akumulatif
     is_average = "average" in metric.lower() or "fare" in metric.lower() or "tip" in metric.lower()
 
     if not is_average:
-        # Untuk Revenue & Trip Count: Bar Chart fokus pada volume (besaran batang)
         chart = alt.Chart(top_zones).mark_bar(color="#1D4ED8", cornerRadiusEnd=4).encode(
             x=alt.X(f"{metric}:Q", title=metric_label),
             y=alt.Y("zone:N", sort="-x", title="Zona"),
             tooltip=["zone", "borough", alt.Tooltip(f"{metric}:Q", format=",.2f")]
         ).properties(height=425)
     else:
-        # Untuk Average Fare/Tip: Gunakan Bar Chart dengan warna gradasi 
-        # untuk menunjukkan 'kualitas' atau 'intensitas' rata-rata di zona tersebut
         chart = alt.Chart(top_zones).mark_bar().encode(
             x=alt.X(f"{metric}:Q", title=metric_label),
             y=alt.Y("zone:N", sort="-x", title="Zona"),
@@ -31,7 +26,6 @@ def render_top_zones_chart(df, metric, metric_label, top_n):
             tooltip=["zone", "borough", alt.Tooltip(f"{metric}:Q", format=",.2f")]
         ).properties(height=425)
 
-    # Tambahkan label teks angka di ujung batang agar informatif
     text = chart.mark_text(
         align='left',
         baseline='middle',

@@ -5,11 +5,8 @@ load_dotenv()
 from pathlib import Path
 import os
 
-# 1. Deteksi ROOT Project (Naik 3 tingkat dari config/settings.py)
-# folder: src/nyc_taxi/config/ -> src/nyc_taxi/ -> src/ -> ROOT
 ROOT_DIR = Path(__file__).resolve().parents[3]
 
-# 2. Tentukan Path Data & DB di ROOT
 DATA_DIR = ROOT_DIR / "data"
 BRONZE_DIR = DATA_DIR / "bronze"
 STATIC_DIR = DATA_DIR / "static"

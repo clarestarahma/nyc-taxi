@@ -20,7 +20,10 @@ from nyc_taxi.queries.taxi_queries import TaxiQueries
 #     return duckdb.connect(DATABASE_PATH)
 
 def get_connection():
-    token = st.secrets.get("MOTHERDUCK_TOKEN")
+    try:
+        token = st.secrets.get("MOTHERDUCK_TOKEN")
+    except:
+        token = None
     
     if token:
         return duckdb.connect(f"md:nyc_taxi_cloud?motherduck_token={token}")

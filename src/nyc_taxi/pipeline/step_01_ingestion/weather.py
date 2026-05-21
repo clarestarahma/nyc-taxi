@@ -13,7 +13,7 @@ from nyc_taxi.config.settings import (
 )
 
 # =========================
-# TASK 1: FETCH DATA
+# FETCH DATA
 # =========================
 @task(name="Fetch Weather Data", retries=3, retry_delay_seconds=5)
 def fetch_weather_data():
@@ -39,7 +39,7 @@ def fetch_weather_data():
     return response.json()
 
 # =========================
-# TASK 2: SAVE RAW JSON
+# SAVE RAW JSON
 # =========================
 @task(name="Save Raw Weather JSON to data/static")
 def save_raw_weather_json(data: dict):
@@ -57,30 +57,8 @@ def save_raw_weather_json(data: dict):
         logger.error(f"❌ Failed to save raw weather JSON to {file_path}: {e}")
         raise
 
-# # =========================
-# # TASK 3: TRANSFORM
-# # =========================
-# @task(name="Transform Weather Data")
-# def transform_weather_data(data: dict) -> pd.DataFrame:
-#     logger = get_run_logger()
-    
-#     daily = data.get("daily", {})
-
-#     df = pd.DataFrame({
-#         "date": pd.to_datetime(daily.get("time")),
-#         "temperature_max": daily.get("temperature_2m_max"),
-#         "temperature_min": daily.get("temperature_2m_min"),
-#         "precipitation": daily.get("precipitation_sum"),
-#         "wind_speed_max": daily.get("windspeed_10m_max"),
-#         "weather_code": daily.get("weathercode")
-#     })
-
-#     logger.info(f"✅ Weather data transformed into DataFrame with {len(df)} records.")
-
-#     return df
-
 # =========================
-# TASK 4: SAVE
+# SAVE
 # =========================
 @task(name="Save Weather Data to data/static")
 def save_weather_data(df: pd.DataFrame):

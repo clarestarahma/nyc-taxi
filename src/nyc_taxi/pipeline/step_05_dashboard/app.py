@@ -22,11 +22,13 @@ def streamlit_pages():
             ["Zona Revenue", "Pengaruh Cuaca", "Prediksi Trip"]
         )
 
-    # --- LOGIKA RENDER HALAMAN (CONTROLLER) ---
-    # Di sini kita panggil fungsi render dari masing-masing file di folder pages
+    # --- LOGIKA RENDER HALAMAN ---
     if "Zona Revenue" in selected_page:
         zona_revenue.render_page()
     elif "Pengaruh Cuaca" in selected_page:
         pengaruh_cuaca.render_page()
     elif "Prediksi Trip" in selected_page:
         prediksi_trip.render_page()
+
+if __name__ == "__main__":
+    streamlit_pages()

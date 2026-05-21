@@ -14,7 +14,6 @@ def render_borough_analysis(df, metric, metric_label, top_n):
         borough_data = df.groupby('borough')[metric].sum().reset_index()
         label_tengah = "Total"
 
-    # 2. FILTER TOP N
     borough_data = borough_data.nlargest(top_n, metric)
 
     display_val = borough_data[metric].mean() if is_average else borough_data[metric].sum()
@@ -46,8 +45,7 @@ def render_borough_analysis(df, metric, metric_label, top_n):
             text=alt.Text(f'{metric}:Q', format='.2s')
         )
 
-        # Tinggi dinamis: makin banyak top_n, makin tinggi grafiknya
-        # dynamic_height = 150 + (top_n * 30)
+        # Tinggi dinamis
         st.altair_chart((bars + text).properties(height=425), width='stretch')
     else:
         # Diagram lingkaran
