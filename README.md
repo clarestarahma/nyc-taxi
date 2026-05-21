@@ -23,6 +23,7 @@ Raw Data → Ingestion → Preprocessing → Analysis → Prediction → Dashboa
 ├── requirements.txt
 └── .env.example            # Template untuk environment variables
 ```
+___
 
 ## 🚀 Cara Menjalankan
 
@@ -37,11 +38,21 @@ Pastikan kamu sudah meng-clone repository ini ke komputer lokal:
 - Install `uv` `(https://docs.astral.sh/uv/getting-started/installation/#standalone-installer)`
 - Install `just` `(https://github.com/casey/just)`
 
-### 3. Setup & Ingestion
-Gunakan perintah `just setup` untuk setup virtual environment dan install dependencies
-Gunakan perintah `just ingest` untuk menjalankan proses penarikan data (Ingestion) ke DuckDB
-Perintah lainnya dapat dilihat di file `justfile`
+### 3. Masuk ke direktori proyek
+`cd nyc-taxi`
 
+### 4. Install Dependensi
+Gunakan perintah `uv sync` untuk menginstall seluruh dependensi pada proyek ini
+
+### 5. Setup & Ingestion
+Gunakan perintah `just setup` untuk setup virtual environment dan install dependencies
+Gunakan perintah `just run-all` untuk menjalankan seluruh proses
+Setelah serluruh proses dijalankan, gunakan perintah `just run` atau `just dashboard run` untuk menjalankan dashboard
+
+## Proyek ini telah di deploy dan dapat dibuka pada link berikut:
+### [Proyek-Akhir-RDV-5](https://nyc-taxi-rdv5.streamlit.app/)
+
+___
 
 ## 👥 Struktur Tim & Tanggung Jawab 
 | Nama | Tugas |
